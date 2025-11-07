@@ -1,9 +1,25 @@
 import Button from "@/components/Button";
+import designExample1Img from "@/assets/images/design-example-1.png";
+import designExample2Img from "@/assets/images/design-example-2.png";
+import Image from "next/image";
+import Pointer from "@/components/Pointer";
 
 export default function Hero() {
   return (
-    <section className="py-24">
-      <div className="container px-4 mx-auto">
+    <section className="py-24 overflow-x-clip">
+      <div className="container px-4 mx-auto relative">
+        <div className="absolute -left-32 top-16 hidden lg:block">
+          <Image src={designExample1Img} alt="Design Example 1" />
+        </div>
+        <div className="absolute -right-64 -top-16 hidden lg:block">
+          <Image src={designExample2Img} alt="Design Example 2" />
+        </div>
+        <div className="absolute left-56 top-96 hidden lg:block">
+          <Pointer name="Andrea" />
+        </div>
+        <div className="absolute right-80 -top-4 hidden lg:block">
+          <Pointer name="Justin" color="red" />
+        </div>
         <div className="flex justify-center">
           <div className="inline-flex py-1 px-3 bg-linear-to-r from-purple-400 to-pink-400 rounded-full text-neutral-950 font-bold">
             $7.5M seed round raised
