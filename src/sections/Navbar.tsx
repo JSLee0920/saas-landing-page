@@ -31,8 +31,18 @@ export default function Navbar() {
           </div>
           <div className="flex justify-end gap-4">
             <FontAwesomeIcon icon={faBars} className="w-6 h-6 md:hidden" />
-            <Button variant="secondary">Log In</Button>
-            <Button variant="primary">Sign Up</Button>
+            <Button
+              variant="secondary"
+              className="hidden md:inline-flex items-center"
+            >
+              Log In
+            </Button>
+            <Button
+              variant="primary"
+              className="hidden md:inline-flex items-center"
+            >
+              Sign Up
+            </Button>
           </div>
         </div>
       </div>
