@@ -63,7 +63,7 @@ export default function Integrations() {
               <IntegrationsColumn integrations={integrations} />
               <IntegrationsColumn
                 integrations={integrations.slice().reverse()}
-                className="hidden md:flex lg:-mt-8"
+                className="hidden md:flex lg:mt-8"
               />
             </div>
           </div>
