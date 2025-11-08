@@ -1,3 +1,5 @@
+"use client";
+
 import Tag from "@/components/Tag";
 import figmaIcon from "@/assets/images/figma-logo.svg";
 import notionIcon from "@/assets/images/notion-logo.svg";
@@ -7,6 +9,8 @@ import framerIcon from "@/assets/images/framer-logo.svg";
 import githubIcon from "@/assets/images/github-logo.svg";
 import Image from "next/image";
 import IntegrationsColumn from "@/components/IntegrationsColumn";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
 
 const integrations = [
   {
@@ -44,6 +48,34 @@ const integrations = [
 export type IntegrationsType = typeof integrations;
 
 export default function Integrations() {
+  const column1Ref = useRef<HTMLDivElement>(null);
+  const column2Ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!column1Ref.current || !column2Ref.current) return;
+
+    const column1Height = column1Ref.current.scrollHeight / 2;
+    const column2Height = column2Ref.current.scrollHeight / 2;
+
+    gsap.to(column1Ref.current, {
+      y: -column1Height,
+      duration: 20,
+      ease: "none",
+      repeat: -1,
+    });
+
+    gsap.fromTo(
+      column2Ref.current,
+      { y: -column2Height },
+      {
+        y: 0,
+        duration: 20,
+        ease: "none",
+        repeat: -1,
+      }
+    );
+  }, []);
+
   return (
     <section className="py-24 overflow-hidden">
       <div className="container px-4 mx-auto">
@@ -60,11 +92,21 @@ export default function Integrations() {
           </div>
           <div>
             <div className="h-[400px] lg:h-[800px] mt-8 lg:mt-0 grid md:grid-cols-2 gap-4 overflow-hidden mask-[linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)] lg:max-w-xl lg:justify-self-end">
-              <IntegrationsColumn integrations={integrations} />
-              <IntegrationsColumn
-                integrations={integrations.slice().reverse()}
-                className="hidden md:flex lg:mt-8"
-              />
+              <div ref={column1Ref}>
+                <IntegrationsColumn integrations={integrations} />
+                <IntegrationsColumn integrations={integrations} />
+              </div>
+              <div
+                ref={column2Ref}
+                className="hidden md:flex md:flex-col lg:mt-8"
+              >
+                <IntegrationsColumn
+                  integrations={integrations.slice().reverse()}
+                />
+                <IntegrationsColumn
+                  integrations={integrations.slice().reverse()}
+                />
+              </div>
             </div>
           </div>
         </div>
