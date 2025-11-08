@@ -2,11 +2,10 @@
 
 import Image from "next/image";
 import logo from "@/assets/images/logo.svg";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "@/components/Button";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { twMerge } from "tailwind-merge";
+import gsap from "gsap";
 
 const navLinks = [
   { label: "Home", href: "#" },
@@ -17,6 +16,38 @@ const navLinks = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      setShowMenu(true);
+      setTimeout(() => {
+        if (!menuRef.current) return;
+        const menuItems = Array.from(menuRef.current.children) as HTMLElement[];
+
+        gsap.set(menuItems, { opacity: 0, y: -20 });
+        gsap.to(menuItems, {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          ease: "power2.out",
+        });
+      }, 10);
+    } else if (showMenu && menuRef.current) {
+      const menuItems = Array.from(menuRef.current.children) as HTMLElement[];
+      gsap.to(menuItems, {
+        opacity: 0,
+        y: -10,
+        duration: 0.4,
+        ease: "power2.in",
+        onComplete: () => {
+          setShowMenu(false);
+        },
+      });
+    }
+  }, [isOpen, showMenu]);
+
   return (
     <section className="py-4 lg:py-8 fixed w-full top-0 z-50">
       <div className="container mx-auto px-4 max-w-6xl">
@@ -90,15 +121,22 @@ export default function Navbar() {
               </Button>
             </div>
           </div>
-          {isOpen && (
-            <div className="flex flex-col items-center gap-4 py-2">
+          {showMenu && (
+            <div
+              ref={menuRef}
+              className="flex flex-col items-center gap-4 py-2"
+            >
               {navLinks.map((link) => (
-                <a href={link.href} key={link.label} className="">
+                <a href={link.href} key={link.label} className="opacity-0">
                   {link.label}
                 </a>
               ))}
-              <Button variant="secondary">Log In</Button>
-              <Button variant="primary">Sign Up</Button>
+              <div className="opacity-0">
+                <Button variant="secondary">Log In</Button>
+              </div>
+              <div className="opacity-0">
+                <Button variant="primary">Sign Up</Button>
+              </div>
             </div>
           )}
         </div>
