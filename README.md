@@ -15,7 +15,7 @@ bun dev
 ```
 This is a simple SaaS landing page with GSAP animation. 
 
-I used the design and code from Frontend Tribe. Here's the video https://youtu.be/ZZqIR0ru0I4?si=pOhgX_i-zLZmkS6G.
+I used the design and code from the youtuber, Frontend Tribe. Here's his video https://youtu.be/ZZqIR0ru0I4?si=pOhgX_i-zLZmkS6G from Frontend Tribe
 
 I have made some changes to the code but the design still remain the same.
 
