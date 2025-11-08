@@ -1,3 +1,5 @@
+"use client";
+
 export default function CallToAction() {
   return (
     <section className="py-24">
