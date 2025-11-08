@@ -33,7 +33,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="py-30 overflow-x-clip overflow-y-hidden">
+    <section className="md:py-30 py-24 overflow-x-clip overflow-y-hidden">
       <div className="container px-4 mx-auto relative">
         <div
           ref={image1Ref}

@@ -1,5 +1,8 @@
+"use client";
 import Tag from "@/components/Tag";
 import { twMerge } from "tailwind-merge";
+import { useState, useRef, useEffect } from "react";
+import gsap from "gsap";
 
 const faqs = [
   {
@@ -30,9 +33,46 @@ const faqs = [
 ];
 
 export default function Faqs() {
-  const selectedIndex = 0;
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [prevIndex, setPrevIndex] = useState<number>(0);
+  const answersRef = useRef<(HTMLDivElement | null)[]>([]);
+  const iconsRef = useRef<(SVGSVGElement | null)[]>([]);
+
+  useEffect(() => {
+    const indicesToAnimate = [prevIndex, selectedIndex];
+
+    indicesToAnimate.forEach((index) => {
+      const answer = answersRef.current[index];
+      const icon = iconsRef.current[index];
+      if (!answer || !icon) return;
+
+      if (index === selectedIndex) {
+        gsap.fromTo(
+          answer,
+          { height: 0, opacity: 0 },
+          { height: "auto", opacity: 1, duration: 0.3, ease: "power2.out" }
+        );
+        gsap.to(icon, { rotation: 45, duration: 0.3, ease: "power2.out" });
+      } else {
+        gsap.fromTo(
+          answer,
+          { height: answer.scrollHeight },
+          {
+            height: 0,
+            opacity: 0,
+            duration: 0.3,
+            ease: "power2.in",
+          }
+        );
+        gsap.to(icon, { rotation: 0, duration: 0.3, ease: "power2.in" });
+      }
+    });
+
+    setPrevIndex(selectedIndex);
+  }, [selectedIndex]);
+
   return (
-    <section className="py-24">
+    <section className="py-24 text-white min-h-screen">
       <div className="container px-4 mx-auto">
         <div className="flex justify-center">
           <Tag>Faqs</Tag>
@@ -44,11 +84,17 @@ export default function Faqs() {
           {faqs.map((faq, faqIndex) => (
             <div
               key={faq.question}
-              className="bg-neutral-900 rounded-2xl border border-white/10 p-6"
+              className="bg-neutral-900 rounded-2xl border border-white/10 p-6 cursor-pointer hover:border-white/20 transition-colors"
+              onClick={() =>
+                setSelectedIndex(selectedIndex === faqIndex ? -1 : faqIndex)
+              }
             >
               <div className="flex justify-between items-center">
                 <h3 className="font-medium">{faq.question}</h3>
                 <svg
+                  ref={(el) => {
+                    iconsRef.current[faqIndex] = el;
+                  }}
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
                   height="24"
@@ -58,22 +104,22 @@ export default function Faqs() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className={twMerge(
-                    "feather feather-plus text-lime-400 shrink-0",
-                    selectedIndex === faqIndex && "rotate-45"
-                  )}
+                  className="text-lime-400 shrink-0"
                 >
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
               </div>
               <div
-                className={twMerge(
-                  "mt-6",
-                  selectedIndex !== faqIndex && "hidden"
-                )}
+                ref={(el) => {
+                  answersRef.current[faqIndex] = el;
+                }}
+                className="overflow-hidden"
+                style={{ height: faqIndex === selectedIndex ? "auto" : 0 }}
               >
-                <p className="text-white/50">{faq.answer}</p>
+                <div className="mt-6">
+                  <p className="text-white/50">{faq.answer}</p>
+                </div>
               </div>
             </div>
           ))}
