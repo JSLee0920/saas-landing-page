@@ -38,7 +38,6 @@ export default function Hero() {
         <div
           ref={image1Ref}
           className="absolute -left-32 top-16 hidden lg:block"
-          style={{ zIndex: 10 }}
         >
           <Image
             src={designExample1Img}
@@ -49,7 +48,6 @@ export default function Hero() {
         <div
           ref={image2Ref}
           className="absolute -right-64 -top-16 hidden lg:block"
-          style={{ zIndex: 10 }}
         >
           <Image
             src={designExample2Img}
