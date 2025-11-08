@@ -28,11 +28,19 @@ export default function LogoTicker() {
 
   useEffect(() => {
     const slider = sliderRef.current;
-
     if (!slider) return;
 
+    const firstChild = slider.children[0] as HTMLElement;
+    if (!firstChild) return;
+
+    const logoWidth = firstChild.offsetWidth;
+    const gap = 96;
+    const moveDistance = (logoWidth + gap) * logos.length;
+
+    gsap.set(slider, { x: 0 });
+
     gsap.to(slider, {
-      x: -slider.offsetWidth / 2,
+      x: -moveDistance,
       duration: 20,
       ease: "none",
       repeat: -1,
@@ -48,18 +56,14 @@ export default function LogoTicker() {
         <div className="overflow-hidden mt-12 mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
           <div ref={sliderRef} className="flex gap-24 pr-24">
             {logos.map((logo) => (
-              <div key={logo.name} className="shrink-0">
-                <span className="text-white/80 font-semibold text-lg">
-                  <Image src={logo.image} key={logo.name} alt={logo.name} />
-                </span>
-              </div>
+              <Image src={logo.image} key={logo.name} alt={logo.name} />
             ))}
             {logos.map((logo) => (
-              <div key={`${logo.name}-duplicate`} className="shrink-0">
-                <span className="text-white/80 font-semibold text-lg">
-                  <Image src={logo.image} key={logo.name} alt={logo.name} />
-                </span>
-              </div>
+              <Image
+                src={logo.image}
+                key={`${logo.name}-duplicate`}
+                alt={logo.name}
+              />
             ))}
           </div>
         </div>
